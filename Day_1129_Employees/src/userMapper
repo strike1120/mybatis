@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace에는 package명.interface명 기재, 확장자명은 X -->
+<mapper namespace="dao.UsrDAO">
+  <select id="selectAll" resultType="vo.UsrInfo">  <!-- id명에는 메소드명을 쓴다 -->
+  	SELECT * FROM usrinfo <!-- 세미콜론 절대 치면 안됨 --> 
+  </select>
+</mapper>
