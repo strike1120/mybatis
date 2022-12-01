@@ -1,32 +1,4 @@
 -- 회원관리 프로그램에 필요한 테이블 정보
-
---컬럼:
-DROP TABLE addr;
-DROP TABLE members;
-DROP SEQUENCE addr_seq;
-
-CREATE TABLE members(
-    usrid VARCHAR2(15) primary key,
-    usrname VARCHAR2(20) not null,
-    email VARCHAR2(30) unique not null
-);
-
-CREATE TABLE addr(
-    addrno number primary key,
-    city VARCHAR2(20) check(city in('서울시', '인천시', '부산시', '제주시')),
-    address VARCHAR2(20),
-    usrid VARCHAR2(15) references members(usrid)
-);
-
-INSERT INTO members VALUES('kim','김민재','kim@naver.com');
-INSERT INTO members VALUES('son','손흥민','son@naver.com');
-INSERT INTO members VALUES('lee','이강인','lee@naver.com');
-
-commit;
-
-CREATE sequence addr_seq;
-DROP sequence addr_seq;
-
 /*
 
 	테이블 : members
@@ -42,3 +14,48 @@ DROP sequence addr_seq;
 	시퀀스 : addr_seq 
 	
 */
+DROP TABLE members;
+DROP TABLE addr;
+DROP SEQUENCE addr_seq;
+
+CREATE TABLE addr(
+    addrno number primary key,
+    city VARCHAR2(20) check(city in('서울시', '인천시', '부산시', '제주시')),
+    address VARCHAR2(20)
+);
+
+CREATE sequence addr_seq;
+DROP sequence addr_seq;
+
+CREATE TABLE members(
+    usrid VARCHAR2(15) primary key,
+    usrname VARCHAR2(20) not null,
+    email VARCHAR2(30) unique not null,
+    addrno number references addr(addrno)
+);
+
+INSERT INTO addr VALUES(addr_seq.NEXTVAL,'서울시','종로구');
+INSERT INTO addr VALUES(addr_seq.NEXTVAL,'인천시','연수구');
+INSERT INTO addr VALUES(addr_seq.NEXTVAL,'서울시','강남구');
+INSERT INTO addr VALUES(addr_seq.NEXTVAL,'부산시','사상구');
+INSERT INTO addr VALUES(addr_seq.NEXTVAL,'제주시','북제주군');
+
+SELECT * FROM addr;
+
+INSERT INTO members VALUES('hong','홍길동','hong@naver.com',2);
+INSERT INTO members VALUES('son','손오공','son@naver.com',3);
+INSERT INTO members VALUES('ssao','사오정','ssao@naver.com',4);
+
+SELECT * FROM members;
+
+commit;
+
+--아이디, 이름, 이메일, 시, 주소
+select 
+    m.usrid, m.usrname, m.email, a.city, a.address
+from
+    members m, addr a
+where
+    m.addrno = a.addrno;
+
+
